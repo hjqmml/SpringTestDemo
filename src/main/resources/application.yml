@@ -1,0 +1,9 @@
+server:
+ port: 8085
+ servlet:
+   context-path: /test/
+spring:
+  application:
+    name: student
+  profiles:
+    active: local
