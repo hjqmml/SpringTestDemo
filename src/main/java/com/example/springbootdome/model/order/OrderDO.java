@@ -19,11 +19,11 @@ public class OrderDO  {
     /**
      * d订单号
      */
+    @TableId(type = IdType.INPUT)
     private String orderNumber;
     /**
      * 用户账号
      */
-    @TableId(type = IdType.ASSIGN_UUID)
     private String accuntNo;
     /**
      * 商品总数

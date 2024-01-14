@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.UUID;
+
 
 /**
  * 用户订单 Service 实现类
@@ -25,6 +27,8 @@ public class OrderServiceImpl implements OrderService {
     public String createOrder(OrderSaveReqVO createReqVO) {
         // 插入
         OrderDO order = BeanUtils.toBean(createReqVO, OrderDO.class);
+        order.setOrderNumber(UUID.randomUUID().toString());
+
         orderMapper.insert(order);
         // 返回
         return order.getAccuntNo();
