@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.*;
+import java.util.Objects;
 
 @Api(value = "管理后台 - 用户订单",tags = "管理后台 - 用户订单")
 @RestController
@@ -27,6 +29,8 @@ import javax.validation.*;
 public class OrderController {
     @Resource
     private OrderService orderService;
+    @Resource
+    private RedisTemplate redisTemplate;
     @Autowired
     private KafkaTemplate<String,String> kafkaTemplate;
 
@@ -54,9 +58,9 @@ public class OrderController {
     @GetMapping("/get")
     @ApiOperation(value = "获得用户订单",notes = "获得用户订单")
     public OrderRespVO getOrder(@RequestParam("id") String id) {
-        OrderDO order = orderService.getOrder(id);
+        OrderDO order = new OrderDO();
+        order = orderService.getOrder(id);
         return BeanUtils.toBean(order, OrderRespVO.class);
     }
-
 
 }

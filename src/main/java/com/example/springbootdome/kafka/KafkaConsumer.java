@@ -20,6 +20,7 @@ public class KafkaConsumer {
     @Resource
     private OrderService orderService;
 
+
     @KafkaListener(topics = "testhj")
     public void topic_test(String message){
         OrderSaveReqVO orderSaveReqVO = JSON.parseObject(message, OrderSaveReqVO.class);

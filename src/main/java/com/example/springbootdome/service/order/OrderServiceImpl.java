@@ -1,13 +1,16 @@
 package com.example.springbootdome.service.order;
 
+import com.alibaba.fastjson2.JSON;
 import com.example.springbootdome.commen.util.BeanUtils;
 import com.example.springbootdome.controller.order.vo.OrderSaveReqVO;
 import com.example.springbootdome.mapper.order.OrderMapper;
 import com.example.springbootdome.model.order.OrderDO;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -22,6 +25,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private OrderMapper orderMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
 
     @Override
     public String createOrder(OrderSaveReqVO createReqVO) {
@@ -49,7 +54,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDO getOrder(String id) {
-        return orderMapper.selectById(id);
+        OrderDO order = new OrderDO();
+        if (Objects.nonNull(redisTemplate.opsForValue().get(id))){
+            Object str = redisTemplate.opsForValue().get(id);
+            order = JSON.parseObject(str.toString(),OrderDO.class);
+        }else {
+            order = orderMapper.selectById(id);
+            redisTemplate.opsForValue().set(id,JSON.toJSONString(order));
+        }
+        return order;
     }
 
 }
