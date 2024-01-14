@@ -33,7 +33,6 @@ public class OrderController {
     @PostMapping("/create")
     @ApiOperation(value = "创建用户订单",notes = "创建用户订单")
     public String createOrder(@Valid @RequestBody OrderSaveReqVO createReqVO) {
-
         kafkaTemplate.send("testhj",null, JSON.toJSONString(createReqVO));
         return null;
     }
