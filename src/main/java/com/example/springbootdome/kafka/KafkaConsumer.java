@@ -22,7 +22,6 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = "testhj")
     public void topic_test(String message){
-
         OrderSaveReqVO orderSaveReqVO = JSON.parseObject(message, OrderSaveReqVO.class);
         orderService.createOrder(orderSaveReqVO);
             log.info("topic.group1消费了：Topic:" + message + ",Message:" + message);
